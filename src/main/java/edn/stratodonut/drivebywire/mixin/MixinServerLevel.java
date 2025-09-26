@@ -95,34 +95,6 @@ public abstract class MixinServerLevel extends Level {
         return this.getShipWireSignal(pos, direction, false);
     }
 
-    /* private int getShipWireSignal(BlockPos pos, Direction direction, boolean checkOwn) {
-        // pos is the SOURCE block position, direction is where it's providing power TO
-        Ship s = VSGameUtilsKt.getShipManagingPos((ServerLevel)(Object) this, pos);
-        if (s instanceof ServerShip serverShip) {
-            var managerOpt = ShipWireNetworkManager.get(serverShip);
-            if (managerOpt.isPresent()) {
-                var manager = managerOpt.get();
-                
-                if (checkOwn) {
-                    int ownSignal = manager.getSignalAt(pos, direction);
-                    if (ownSignal > 0) {
-                        return ownSignal;
-                    }
-                }
-
-                Direction nodeDir = direction.getOpposite();
-                BlockPos nodePos = pos.relative(direction);
-
-                int adjacentNodeSignal = manager.getSignalAt(nodePos, nodeDir);
-                if (adjacentNodeSignal > 0) {
-                    return adjacentNodeSignal;
-                }
-            }
-        }
-        
-        return 0;
-    } */
-
     private int getShipWireSignal(BlockPos pos, Direction direction, boolean checkOwn) {
         BlockPos target = pos.relative(direction.getOpposite());
         

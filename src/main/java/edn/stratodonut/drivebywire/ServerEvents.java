@@ -41,14 +41,7 @@ public class ServerEvents {
         Level world = event.level;
         LinkedControllerWireServerHandler.tick(world);
         TweakedControllerWireServerHandler.tick(world);
-        
-        if (debugScanDelay > 0) {
-            debugScanDelay--;
-            if (debugScanDelay == 0 && world instanceof ServerLevel serverLevel) {
-                DriveByWireMod.warn("Starting wire network debug scan...");
-                debugLogAllWireNetworks(serverLevel);
-            }
-        }
+
         
         if (triggerManualScan && world instanceof ServerLevel serverLevel) {
             triggerManualScan = false;
@@ -57,16 +50,7 @@ public class ServerEvents {
         }
     }
 
-    private static int debugScanDelay = 0;
     private static boolean triggerManualScan = false;
-    
-    @SubscribeEvent
-    public static void onWorldLoad(net.minecraftforge.event.level.LevelEvent.Load event) {
-        if (event.getLevel() instanceof ServerLevel) {
-            debugScanDelay = 100;
-            DriveByWireMod.warn("World loaded, will scan wire networks in 5 seconds...");
-        }
-    }
     
     public static void requestDebugScan() {
         triggerManualScan = true;
@@ -91,19 +75,6 @@ public class ServerEvents {
                         ServerLevel serverLevel = (ServerLevel) source.getLevel();
                         source.sendSuccess(() -> Component.literal("Starting wire network debug scan..."), false);
                         triggerDebugScan(serverLevel);
-                        return 1;
-                    } else {
-                        source.sendFailure(Component.literal("This command can only be used in a server world!"));
-                        return 0;
-                    }
-                })
-            )
-            .then(Commands.literal("scan")
-                .executes(context -> {
-                    CommandSourceStack source = context.getSource();
-                    if (source.getLevel() instanceof ServerLevel) {
-                        source.sendSuccess(() -> Component.literal("Requesting wire network scan on next tick..."), false);
-                        requestDebugScan();
                         return 1;
                     } else {
                         source.sendFailure(Component.literal("This command can only be used in a server world!"));
