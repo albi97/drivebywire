@@ -161,7 +161,6 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
 
-    maven { url = 'https://maven.tterrag.com/'}
 
     // Add KFF Maven repository
     maven {
@@ -172,6 +171,10 @@ repositories {
     maven {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
+    }
+
+    flatDir {
+        dir 'libs'
     }
 
     exclusiveContent {
@@ -207,7 +210,7 @@ dependencies {
 
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.20)")
+    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.19.3,MC1.21)")
 
     jarJar("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}") {
         jarJar.ranged(it, '[0.6.10,0.6.12)')

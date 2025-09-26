@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.Rotation;
 import org.jetbrains.annotations.Contract;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.impl.shadow.B;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import javax.annotation.Nonnull;
@@ -200,6 +199,7 @@ public class ShipWireNetworkManager {
 
     private void updateWorld(Level level, BlockPos pos) {
         level.updateNeighborsAt(pos, level.getBlockState(pos).getBlock());
+        level.blockUpdated(pos, level.getBlockState(pos).getBlock());
     }
 
     /**

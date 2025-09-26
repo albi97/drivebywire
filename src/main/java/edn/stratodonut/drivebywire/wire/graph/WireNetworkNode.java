@@ -3,6 +3,7 @@ package edn.stratodonut.drivebywire.wire.graph;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import edn.stratodonut.drivebywire.wire.ShipWireNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -102,6 +103,7 @@ public class WireNetworkNode {
 
         public void setInput(Level level, String channel, int signal) {
             ShipWireNetworkManager parentManager = parent.get();
+
             if (parentManager == null) {
                 if (VSGameUtilsKt.getAllShips(level).getById(this.parentShipId) instanceof ServerShip ss &&
                         ShipWireNetworkManager.get(ss).isPresent()) {
@@ -114,7 +116,12 @@ public class WireNetworkNode {
 
             WireNetworkNode n = parentManager.getOrCreateNodeAt(getPosition(), getDirection());
             BlockPos from = BlockPos.of(getPosition()).relative(Direction.from3DDataValue(getDirection()));
-            if (n.setInput(channel, signal)) level.updateNeighborsAt(from, level.getBlockState(from).getBlock());
+
+            boolean updated = n.setInput(channel, signal);
+            if (updated) {
+                level.updateNeighborsAt(from, level.getBlockState(from).getBlock());
+                level.blockUpdated(from, level.getBlockState(from).getBlock());
+            }
         }
 
         public long getRelativePositionInParent() {
